@@ -194,7 +194,7 @@ const Details = () => {
                             <div className='p-5 border'>
                                 <img className='h-[500px] w-full' src={image ? image : product.images?.[0]} alt="" />
                             </div>
-                            <div className='py-3 lg:w-auto w-[190%]'>
+                            <div className='py-3'>
                                 {
                                     product.images && <Carousel
                                         autoPlay={true}
@@ -206,7 +206,7 @@ const Details = () => {
                                             product.images.map((img, i) => {
                                                 return (
                                                     <div key={i} onClick={() => setImage(img)}>
-                                                        <img className='h-[120px] cursor-pointer lg:auto w-[200px]' src={img} alt="" />
+                                                        <img className='h-[120px] cursor-pointer' src={img} alt="" />
                                                     </div>
                                                 );
                                             })
