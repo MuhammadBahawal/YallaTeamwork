@@ -12,11 +12,11 @@ const Categorys = () => {
     const responsive = {
         superLargeDesktop: {
             breakpoint: { max: 4000, min: 3000 },
-            items: 6
+            items: 9
         },
         desktop: {
             breakpoint: { max: 3000, min: 1024 },
-            items: 6
+            items: 9
         },
         tablet: {
             breakpoint: { max: 1024, min: 464 },
@@ -49,19 +49,22 @@ const Categorys = () => {
                 responsive={responsive}
                 transitionDuration={500}
             >
-                {
-                    categorys.map((c, i) => <Link className='h-[185px] block mx-5' key={i} to={`/products?category=${c.name}`}> {/* Add margin */}
-                        <div className='w-full h-full relative p-3 flex flex-col justify-center items-center category-card'>
-                            <img className='w-[100px] h-[100px] rounded-full object-cover' src={c.image} alt="image" />
-                            <div className='w-full font-bold flex justify-center items-center mt-3'>
-                                <span>{c.name}</span>
-                            </div>
-                        </div>
-                    </Link>)
-                }
+               {
+    categorys.map((c, i) => (
+        <Link className='h-[120px] block mx-5' key={i} to={`/products?category=${c.name}`}>
+            <div className='w-full h-full flex flex-col justify-center items-center category-card'>
+                <img className='w-[70px] h-[70px] rounded-full object-cover' src={c.image} alt={c.name} />
+                <div className='w-full font-bold flex justify-center items-center mt-2 text-sm'>
+                    <span>{c.name}</span>
+                </div>
+            </div>
+        </Link>
+    ))
+}
+
             </Carousel>
 
-        </div>
+        </div> 
 
     )
 }

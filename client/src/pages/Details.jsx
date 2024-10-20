@@ -1,74 +1,97 @@
-import React, { useEffect, useState } from 'react';
-import Headers from '../components/Headers';
-import Footer from '../components/Footer';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import { useDispatch, useSelector } from 'react-redux';
-import 'swiper/css/pagination';
-import { Pagination } from 'swiper';
-import Ratings from '../components/Ratings';
-import { AiFillHeart } from 'react-icons/ai';
-import { FaFacebookF, FaLinkedin } from 'react-icons/fa';
-import { AiFillGithub, AiOutlineTwitter } from 'react-icons/ai';
-import Reviews from '../components/Reviews';
-import { get_product } from '../store/reducers/homeReducer';
-import { add_to_card, messageClear, add_to_wishlist } from '../store/reducers/cardReducer';
-import toast from 'react-hot-toast';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import Headers from '../components/Headers'
+import Footer from '../components/Footer'
+import { Link, useParams, useNavigate } from 'react-router-dom'
+import { MdOutlineKeyboardArrowRight } from 'react-icons/md'
+import Carousel from 'react-multi-carousel'
+import 'react-multi-carousel/lib/styles.css'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+import { useDispatch, useSelector } from 'react-redux'
+import 'swiper/css/pagination'
+import { Pagination } from 'swiper'
+import Ratings from '../components/Ratings'
+import { AiFillHeart } from 'react-icons/ai'
+import { FaFacebookF, FaLinkedin } from 'react-icons/fa'
+import { AiFillGithub, AiOutlineTwitter } from 'react-icons/ai'
+import Reviews from '../components/Reviews'
+import { get_product } from '../store/reducers/homeReducer'
+import { add_to_card, messageClear, add_to_wishlist } from '../store/reducers/cardReducer'
+import toast from 'react-hot-toast'
+import axios from 'axios'
 
 const Details = () => {
-    const navigate = useNavigate();
-    const { slug, productId, customerId } = useParams();
-    const dispatch = useDispatch();
-    const { product, relatedProducts, moreProducts } = useSelector(state => state.home);
-    const { userInfo } = useSelector(state => state.auth);
-    const { errorMessage, successMessage } = useSelector(state => state.card);
-    const [message, setMessage] = useState("");
-    const [image, setImage] = useState('');
-    const [state, setState] = useState('reviews');
-    const responsive = {
-        superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 5 },
-        desktop: { breakpoint: { max: 3000, min: 1024 }, items: 5 },
-        tablet: { breakpoint: { max: 1024, min: 464 }, items: 4 },
-        mdtablet: { breakpoint: { max: 991, min: 464 }, items: 4 },
-        mobile: { breakpoint: { max: 768, min: 0 }, items: 3 },
-        smmobile: { breakpoint: { max: 640, min: 0 }, items: 2 },
-        xsmobile: { breakpoint: { max: 440, min: 0 }, items: 1 }
-    };
 
-    const [quantity, setQuantity] = useState(1);
+    const navigate = useNavigate()
+
+    const { slug , productId , customerId} = useParams()
+    const dispatch = useDispatch()
+    const { product, relatedProducts, moreProducts } = useSelector(state => state.home)
+    const { userInfo } = useSelector(state => state.auth)
+    const { errorMessage, successMessage } = useSelector(state => state.card)
+    const [message, setMessage] = useState("")
+    const [image, setImage] = useState('')
+    const [state, setState] = useState('reviews')
+    const responsive = {
+        superLargeDesktop: {
+            breakpoint: { max: 4000, min: 3000 },
+            items: 5
+        },
+        desktop: {
+            breakpoint: { max: 3000, min: 1024 },
+            items: 5
+        },
+        tablet: {
+            breakpoint: { max: 1024, min: 464 },
+            items: 4
+        },
+        mdtablet: {
+            breakpoint: { max: 991, min: 464 },
+            items: 4
+        },
+        mobile: {
+            breakpoint: { max: 768, min: 0 },
+            items: 3
+        },
+        smmobile: {
+            breakpoint: { max: 640, min: 0 },
+            items: 2
+        },
+        xsmobile: {
+            breakpoint: { max: 440, min: 0 },
+            items: 1
+        }
+    }
+
+    const [quantity, setQuantity] = useState(1)
 
     const inc = () => {
         if (quantity >= product.stock) {
-            toast.error('Out of stock');
+            toast.error('Out of stock')
         } else {
-            setQuantity(quantity + 1);
+            setQuantity(quantity + 1)
         }
-    };
+    }
 
     const dec = () => {
         if (quantity > 1) {
-            setQuantity(quantity - 1);
+            setQuantity(quantity - 1)
         }
-    };
+    }
 
     const add_card = () => {
-        if (userInfo) {
+         if (userInfo) {
             dispatch(add_to_card({
                 userId: userInfo.id,
                 quantity,
                 productId: product._id,
-                isCoupon: productId ? true : false,
-                customerid: customerId ? customerId : ""
-            }));
+                isCoupon : productId ? true : false,
+                customerid :  customerId ? customerId : ""
+            }))
         } else {
-            navigate('/login');
+            navigate('/login')
         }
-    };
+    }
 
     const add_wishlist = () => {
         if (userInfo) {
@@ -81,33 +104,33 @@ const Details = () => {
                 discount: product.discount,
                 rating: product.rating,
                 slug: product.slug
-            }));
+            }))
         } else {
-            navigate('/login');
+            navigate('/login')
         }
-    };
+
+    }
 
     useEffect(() => {
-        dispatch(get_product(slug));
-    }, [slug]);
-
+        dispatch(get_product(slug))
+    }, [slug])
     useEffect(() => {
         if (errorMessage) {
-            toast.error(errorMessage);
-            dispatch(messageClear());
+            toast.error(errorMessage)
+            dispatch(messageClear())
         }
         if (successMessage) {
-            toast.success(successMessage);
-            dispatch(messageClear());
+            toast.success(successMessage)
+            dispatch(messageClear())
         }
-    }, [errorMessage, successMessage]);
+    }, [errorMessage, successMessage])
 
     const buy = () => {
         let price = 0;
         if (product.discount !== 0) {
-            price = product.price - Math.floor((product.price * product.discount) / 100);
+            price = product.price - Math.floor((product.price * product.discount) / 100)
         } else {
-            price = product.price;
+            price = product.price
         }
         const obj = [
             {
@@ -121,7 +144,7 @@ const Details = () => {
                     }
                 ]
             }
-        ];
+        ]
         navigate('/shipping', {
             state: {
                 products: obj,
@@ -129,49 +152,52 @@ const Details = () => {
                 shipping_fee: 85,
                 items: 1
             }
-        });
-    };
-
-    const createReferralLink = async () => {
+        })
+    }
+     const createReferralLink = async () => {
         try {
-            const p_id = product._id;
+            const p_id = product._id
             const newReferral = {
                 customer: userInfo.id,
                 productId: p_id,
                 link: `/product/details/${slug}/productId/${p_id}/coupon/${userInfo.id}`,
                 type: 'coupon code',
             };
-
+            
+           
             const response = await axios.post('http://localhost:5000/api/promotion/create', newReferral); // Adjust API path
-            if (response.status === 200) {
-                setMessage('Referral link created and copied successfully!');
+            if(response.status == 200 || response.status ){
+                setMessage('Referral link created  && copy successfully!')
                 navigator.clipboard.writeText(`http://localhost:3000/product/details/${slug}/productId/${p_id}/coupon/${userInfo.id}`);
                 setTimeout(() => {
-                    setMessage("");
-                }, 3000);
+                    setMessage("")
+                }, 3000)
             }
-
-            if (response?.status === 400) {
-                setMessage(response.data.error);
+            
+            if(response?.status == 400){
+                 
+                setMessage(response.data.error)
             }
+           
+ 
         } catch (err) {
-            if (err.response) {
-                setMessage(err.response.data.error);
-            }
-            setTimeout(() => {
-                setMessage("");
-            }, 3000);
-        }
+            if(err.response){
+                setMessage(err.response.data.error)}
+                 
+                setTimeout(() => {
+                    setMessage("")
+                }, 3000)
+             
+        }  
     };
-
     return (
         <div>
             <Headers />
-            <div className='bg-[url("http://localhost:3000/images/banner/order.jpg")] h-[220px] bg-cover bg-no-repeat relative bg-left'>
+            <div className='bg-[url("http://localhost:3000/images/banner/order.jpg")] h-[220px] mt-6 bg-cover bg-no-repeat relative bg-left'>
                 <div className='absolute left-0 top-0 w-full h-full bg-[#2422228a]'>
                     <div className='w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto'>
                         <div className='flex flex-col justify-center gap-1 items-center h-full w-full text-white'>
-                            <h2 className='text-3xl font-bold'></h2>
+                            <h2 className='text-3xl font-bold'>Yalla7</h2>
                         </div>
                     </div>
                 </div>
@@ -194,7 +220,7 @@ const Details = () => {
                             <div className='p-5 border'>
                                 <img className='h-[500px] w-full' src={image ? image : product.images?.[0]} alt="" />
                             </div>
-                            <div className='py-3 lg:w-auto w-[190%]'>
+                            <div className='py-3'>
                                 {
                                     product.images && <Carousel
                                         autoPlay={true}
@@ -206,9 +232,9 @@ const Details = () => {
                                             product.images.map((img, i) => {
                                                 return (
                                                     <div key={i} onClick={() => setImage(img)}>
-                                                        <img className='h-[120px] cursor-pointer lg:auto w-[200px]' src={img} alt="" />
+                                                        <img className='h-[120px] cursor-pointer' src={img} alt="" />
                                                     </div>
-                                                );
+                                                )
                                             })
                                         }
                                     </Carousel>
@@ -233,54 +259,178 @@ const Details = () => {
                                     </> : <h2>Price : AED{product.price}</h2>
                                 }
                             </div>
-                            <div className='flex items-center gap-5'>
-                                <div className='flex gap-4'>
-                                    <div className='flex flex-col'>
-                                        <span className='text-slate-600'>Quantity:</span>
-                                        <div className='flex border rounded-lg'>
-                                            <button className='text-lg border-r px-3' onClick={dec}>-</button>
-                                            <span className='text-lg px-3'>{quantity}</span>
-                                            <button className='text-lg border-l px-3' onClick={inc}>+</button>
+                            <div className='text-slate-600'>
+                                <p>{product.description}</p>
+                            </div>
+                            <div className='flex gap-3 pb-10 border-b'>
+                                {
+                                    product.stock ? <>
+                                        <div className='flex bg-slate-200 h-[50px] justify-center items-center text-xl'>
+                                            <div onClick={dec} className='px-6 cursor-pointer'>-</div>
+                                            <div className='px-5'>{quantity}</div>
+                                            <div onClick={inc} className='px-6 cursor-pointer'>+</div>
                                         </div>
+                                        <div>
+                                            <button onClick={add_card} className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-purple-500/40 bg-purple-500 text-white'>Add To Card</button>
+                                        </div>
+                                    </> : ''
+                                }
+                                <div>
+                                    <div onClick={add_wishlist} className='h-[50px] w-[50px] flex justify-center items-center cursor-pointer hover:shadow-lg hover:shadow-cyan-500/40 bg-red-500 text-white'>
+                                        <AiFillHeart />
                                     </div>
                                 </div>
-                                <button onClick={add_card} className='bg-orange-500 hover:bg-orange-600 transition-all text-white font-bold text-lg rounded-lg py-2 px-4'>Add to Cart</button>
-                                <button onClick={add_wishlist} className='bg-transparent border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white transition-all font-bold text-lg rounded-lg py-2 px-4 flex gap-2 items-center'><AiFillHeart /> Wishlist</button>
                             </div>
-                            <div className='flex gap-5'>
-                                <button onClick={buy} className='bg-green-500 hover:bg-green-600 transition-all text-white font-bold text-lg rounded-lg py-2 px-4'>Buy Now</button>
-                                <button onClick={createReferralLink} className='bg-blue-500 hover:bg-blue-600 transition-all text-white font-bold text-lg rounded-lg py-2 px-4'>Get Referral Link</button>
+                            <div className='flex py-5 gap-5'>
+                                <div className='w-[150px] text-black font-bold text-xl flex flex-col gap-5'>
+                                    <span>Availability</span>
+                                 
+                                </div>
+                                <div className='flex flex-col gap-5'>
+                                    <span className={`text-${product.stock ? 'green' : 'red'}-500`}>
+                                        {product.stock ? `In Stock(${product.stock})` : 'Out of Stock'}
+                                    </span>
+                                    {/* <ul className='flex justify-start items-center gap-3'>
+                                        <li>
+                                            <a className='w-[38px] h-[38px] hover:bg-[#7fad39] hover:text-white flex justify-center items-center bg-indigo-500 rounded-full text-white' href="#"><FaFacebookF /></a>
+                                        </li>
+                                        <li>
+                                            <a className='w-[38px] h-[38px] hover:bg-[#7fad39] hover:text-white flex justify-center items-center bg-cyan-500 rounded-full text-white' href="#"><AiOutlineTwitter /></a>
+                                        </li>
+                                        <li>
+                                            <a className='w-[38px] h-[38px] hover:bg-[#7fad39] hover:text-white flex justify-center items-center bg-purple-500 rounded-full text-white' href="#"><FaLinkedin /></a>
+                                        </li>
+                                        <li>
+                                            <a className='w-[38px] h-[38px] hover:bg-[#7fad39] hover:text-white flex justify-center items-center bg-blue-500 rounded-full text-white' href="#"><AiFillGithub /></a>
+                                        </li>
+                                    </ul> */}
+                                </div>
                             </div>
-                            {message && <div className='bg-green-200 p-2 text-green-800'>{message}</div>}
+                            <div className='flex gap-3'>
+                                {
+                                    product.stock ? <button onClick={buy} className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-emerald-500/40 bg-[#FFD700] text-white'>Buy Now</button> : ""
+                                }
+                                {
+                                    product.stock ? <button onClick={createReferralLink} className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-emerald-500/40 bg-[#FFD700] text-white'>Create & copy  Referral</button> : ""
+                                }
+                                <Link to={`/dashboard/chat/${product.sellerId}`} className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-lime-500/40 bg-[#FFD700] text-white block'>Chat Seller</Link>
+                            </div>
+                            {message && <div>{message}</div>}
+
                         </div>
                     </div>
                 </div>
             </section>
-            <section className='bg-slate-100 pt-10 pb-5'>
-                <div className='w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto'>
-                    <h2 className='text-3xl font-bold'>Description</h2>
-                    <p className='text-slate-600'>{product.description}</p>
+            <section>
+                <div className='w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto pb-16'>
+                    <div className='flex flex-wrap'>
+                        <div className='w-[72%] md-lg:w-full'>
+                            <div className='pr-4 md-lg:pr-0'>
+                                <div className='grid grid-cols-2'>
+                                    <button onClick={() => setState('reviews')} className={`py-1 hover:text-white px-5 hover:bg-green-500 ${state === 'reviews' ? 'bg-[#FFD700] text-white' : 'bg-slate-200 text-slate-700'} rounded-sm`}>Reviews</button>
+                                    <button onClick={() => setState('description')} className={`py-1 px-5 hover:text-white hover:bg-green-500 ${state === 'description' ? 'bg-[#FFD700] text-white' : 'bg-slate-200 text-slate-700'} rounded-sm`}>Description</button>
+                                </div>
+                                <div>
+                                    {
+                                        state === 'reviews' ? <Reviews product={product} /> : <p className='py-5 text-slate-600'>{product.description}</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div className='w-[28%] md-lg:w-full'>
+                            <div className='pl-4 md-lg:pl-0'>
+                                <div className='px-3 py-2 text-slate-600 bg-slate-200'>
+                                    <h2> From {product.shopName}</h2>
+                                </div>
+                                <div className='flex flex-col gap-5 mt-3 border p-3'>
+                                    {
+                                        moreProducts.map((p, i) => {
+                                            return (
+                                                <Link className='block'>
+                                                    <div className='relative h-[270px]'>
+                                                        <img className='w-full h-full' src={p.images[0]} />
+                                                        {
+                                                            p.discount !== 0 && <div className='flex justify-center items-center absolute text-white w-[38px] h-[38px] rounded-full bg-red-500 font-semibold text-xs left-2 top-2'>{p.discount}%</div>
+                                                        }
+                                                    </div>
+                                                    <h2 className='text-slate-600 py-1'>{p.name}</h2>
+                                                    <div className='flex gap-2'>
+                                                        <h2 className='text-[#6699ff] text-lg font-bold'>${p.price}</h2>
+                                                        <div className='flex items-center gap-2'>
+                                                            <Ratings ratings={p.rating} />
+                                                        </div>
+                                                    </div>
+                                                </Link>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
-            <section className='bg-slate-100 pt-10 pb-5'>
+            <section>
                 <div className='w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto'>
-                    <h2 className='text-3xl font-bold'>Related Products</h2>
-                    <div className='grid grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-8'>
-                        {
-                            relatedProducts.map((item, index) => (
-                                <div key={index} className='border p-5'>
-                                    <img src={item.images[0]} alt={item.name} className='h-[250px] w-full' />
-                                    <h3 className='text-lg font-bold'>{item.name}</h3>
-                                    <h3 className='text-xl text-red-500'>AED{item.price}</h3>
-                                </div>
-                            ))
-                        }
+                    <h2 className='text-2xl py-8 text-slate-600'>Related Products</h2>
+                    <div>
+                        <Swiper
+                            slidesPerView='auto'
+                            breakpoints={{
+                                1280: {
+                                    slidesPerView: 3
+                                },
+                                565: {
+                                    slidesPerView: 2
+                                }
+                            }}
+                            spaceBetween={25}
+                            loop={true}
+                            pagination={{
+                                clickable: true,
+                                el: '.custom_bullet'
+                            }}
+                            modules={[Pagination]}
+                            className='mySwiper'
+                        >
+                            {
+                                relatedProducts.map((p, i) => {
+                                    return (
+                                        <SwiperSlide key={i}>
+                                            <Link className='block'>
+                                                <div className='relative h-[270px]'>
+                                                    <div className='w-full h-full'>
+                                                        <img className='w-full h-full' src={p.images[0]} />
+                                                        <div className='absolute h-full w-full top-0 left-0 bg-[#000] opacity-25 hover:opacity-50 transition-all duration-500'></div>
+                                                    </div>
+                                                    {
+                                                        p.discount !== 0 && <div className='flex justify-center items-center absolute text-white w-[38px] h-[38px] rounded-full bg-red-500 font-semibold text-xs left-2 top-2'>{p.discount}%</div>
+                                                    }
+                                                </div>
+                                                <div className='p-4 flex flex-col gap-1'>
+                                                    <h2 className='text-slate-600 text-lg font-semibold'>{p.name}</h2>
+                                                    <div className='flex justify-start items-center gap-3'>
+                                                        <h2 className='text-[#6699ff] text-lg font-bold'>${p.price}</h2>
+                                                        <div className='flex'>
+                                                            <Ratings ratings={p.rating} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        </SwiperSlide>
+                                    )
+                                })
+                            }
+                        </Swiper>
+                    </div>
+                    <div className='w-full flex justify-center items-center py-10'>
+                        <div className='custom_bullet justify-center gap-3 !w-auto'></div>
                     </div>
                 </div>
             </section>
             <Footer />
         </div>
-    );
-};
+    )
+}
 
-export default Details;
+export default Details
