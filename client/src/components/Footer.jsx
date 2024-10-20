@@ -1,120 +1,130 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { FaFacebookF, FaLinkedin, FaWhatsapp } from "react-icons/fa";
-import { AiFillGithub, AiOutlineTwitter } from "react-icons/ai";
-import { useSelector } from "react-redux";
-import { AiFillShopping, AiFillHeart } from "react-icons/ai";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import './Footer.css';
 
 const Footer = () => {
-  const { card_product_count, wishlist_count } = useSelector(
-    (state) => state.card
-  );
-  const navigate = useNavigate();
-  const { userInfo } = useSelector((state) => state.auth);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    fetchFooterData();
+  }, []);
+
+  const fetchFooterData = async () => {
+    try {
+      const response = await fetch('/data/data.json');
+      const data = await response.json();
+      populateFooter(data.products);
+    } catch (error) {
+      console.error('Error fetching footer data:', error);
+    }
+  };
+
+  const populateFooter = (products) => {
+    const uniqueCategories = [...new Set(products.map(item => item.category))].slice(0, 7);
+    setCategories(uniqueCategories.map(category => {
+      const subcategories = [...new Set(products
+        .filter(item => item.category === category)
+        .map(item => item.subcategory))];
+      return { category, subcategories };
+    }));
+  };
+
+  const footerLinks = {
+    electronics: [
+      'Mobiles', 'Tablets', 'Laptops', 'Home Appliances',
+      'Camera, Photo & Video', 'Televisions', 'Headphones', 'Video Games',
+    ],
+    fashion: [
+      'Women\'s Fashion', 'Men\'s Fashion', 'Girls\' Fashion', 'Boys\' Fashion',
+      'Watches', 'Jewellery', 'Women\'s Handbags', 'Men\'s Eyewear',
+    ],
+    homeAndKitchen: [
+      'Bath', 'Home Decor', 'Kitchen & Dining', 'Tools & Home Improvement',
+      'Audio & Video', 'Furniture', 'Patio, Lawn & Garden', 'Pet Supplies',
+    ],
+    beauty: [
+      'Fragrance', 'Make-up', 'Haircare', 'Skincare',
+      'Bath & Body', 'Electronic Beauty Tools', 'Men\'s Grooming', 'Health Care Essentials',
+    ],
+    babyAndToys: [
+      'Diapering', 'Baby Transport', 'Nursing & Feeding', 'Baby & Kids Fashion',
+      'Baby & Toddler Toys', 'Tricycles & Scooters', 'Board Games & Cards', 'Outdoor Play',
+    ],
+    topBrands: [
+      'Pampers', 'Apple', 'Nike', 'Samsung',
+      'Tefal', 'L\'Oréal Paris', 'Skechers', 'BLACK+DECKER',
+    ],
+    discoverNow: [
+      'noon Digest', 'Brand Glossary', 'Best Mobile Phones', 'Supermall',
+      'Halloween Sale', '11.11 Singles Day Sale', 'Yellow Friday Sale', 'ENBD noon Credit Card',
+    ],
+  };
 
   return (
-    <footer className="bg-[#FFD700]">
-      <div className="w-[85%] flex flex-wrap mx-auto py-16 md-lg:pb-10 sm:pb-6">
-        <div className="w-3/12 lg:w-4/12 sm:w-full">
-          <div className="flex flex-col gap-3 -mt-5">
-            <img
-              className="w-[190px] h-[70x]"
-              src="/images/logo.png"
-              alt="logo"
-            />
-            <span className="text-#333-800 bold text-xl">
-              The Online Shopping Store
-            </span>
-          </div>
+    <footer className="footer">
+      <div className="footer-row1">
+        <div className="content-1">
+          <h1>We're Always Here To Help</h1>
+          <p>Reach out to us through any of these support channels</p>
         </div>
-        <div className="w-5/12 lg:w-8/12 sm:w-full">
-          <div className="flex justify-center sm:justify-start sm:mt-6 w-full">
-            <div>
-              <h2 className="font-bold text-lg mb-2">Usefull links</h2>
-              <div className="flex justify-between gap-[80px] lg:gap-[40px]">
-                <ul className="flex flex-col gap-2 text-slate-600 text-sm">
-                  <li>
-                    <Link to={"/privacy-policy"}> Privacy Policy</Link>
-                  </li>
-                  <li>
-                    <Link to={"/refund-policy"}>Yalla Refund Policy</Link>
-                  </li>
-                </ul>
-                <ul className="flex flex-col gap-2 text-slate-600 text-sm">
-                  <li>
-                    <Link to={"/shops"}>Shop</Link>
-                  </li>
-                  <li>
-                    <Link to={"/shops"}>All Products</Link>
-                  </li>
-                </ul>
-              </div>
+        <div className="content-2">
+          <div className="customer-help">
+            <div className="ico">
+              <i className="fas fa-info-circle"></i>
             </div>
+            <Link to="/support-center" className='lin'>
+              <p>Customer Happiness Center <span>help.noon.com</span></p>
+            </Link>
+          </div>
+
+          <div className="email-support">
+            <div className="ico"><i className="fas fa-envelope"></i></div>
+            <Link to="/support-center" className='lin'>
+              <p>EMAIL SUPPORT <span>care@noon.com</span></p>
+            </Link>
           </div>
         </div>
-        <div className="w-4/12 lg:w-full lg:mt-6">
-          <div className="w-full flex flex-col justify-start gap-5">
-            <h2 className="font-bold text-lg mb-2">Join Our</h2>
-            <ul className="flex justify-start items-center gap-3">
-              <li>
-                <a target="blank"
-                  className="w-[38px] h-[38px] hover:bg-[#7fad39] hover:text-white flex justify-center items-center bg-white rounded-full"
-                  href="https://www.facebook.com/7yalla"
-                >
-                  <FaFacebookF />
-                </a>
-              </li>
-              <li>
-                <a target="blank"
-                  className="w-[38px] h-[38px] hover:bg-[#7fad39] hover:text-white flex justify-center items-center bg-white rounded-full"
-                  href="https://whatsapp.com/channel/0029VaqJsdl6rsQnJmqKM409"
-                >
-                  <FaWhatsapp />
-                </a>
-              </li>
+      </div>
+
+      <div className="gap-2 lg:w-8/12 sm:w-full">
+        <div className="flex justify-center sm:justify-start sm:mt-6 w-full">
+          {Object.entries(footerLinks).map(([category, links]) => (
+            <div key={category} className="flex flex-col">
+              <h2 className="font-bold text-lg mb-2">{category.charAt(0).toUpperCase() + category.slice(1).replace(/([A-Z])/g, ' $1')}</h2>
+              <ul className="flex flex-col gap-2 text-slate-600 text-sm">
+                {links.map((link, index) => (
+                  <li key={index}>
+                    <Link to={`/${link.replace(/\s+/g, '-').toLowerCase()}`}>{link}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="footer-bottom">
+        <div className="footer-bottom-left">
+          <div className="footer-info">
+            <p>© 2024 noon. All Rights Reserved</p>
+          </div>
+          <div className="footer-links">
+            <ul>
+              <Link to="/support-center"><li><i className="fas fa-info-circle"></i> Support Center</li></Link>
+              <Link to="/safety-center"><li><i className="fas fa-shield-alt"></i> Safety Center</li></Link>
+              <Link to="/privacy-policy"><li><i className="fas fa-user-secret"></i> Privacy Policy</li></Link>
+              <Link to="/terms-of-use"><li><i className="fas fa-file-contract"></i> Terms of Use</li></Link>
             </ul>
           </div>
         </div>
-      </div>
-      <div className="w-[85%] flex flex-wrap justify-center items-center text-slate-600 mx-auto py-5 text-center">
-        <span>
-          Copiright ©2024 All rights reserved |{" "}
-          <a className="text-#333-500 underline" href="https://yalla7.com/">
-            Yalla7 | The Online Shoppong Store
-          </a>
-        </span>
-      </div>
 
-      <div className="hidden fixed md-lg:block w-[50px] bottom-3 h-[110px] right-2 bg-white rounded-full p-2">
-        <div className="w-full h-full flex gap-3 flex-col justify-center items-center">
-          <div
-            onClick={() => navigate(userInfo ? "/card" : "/login")}
-            className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]"
-          >
-            <span className="text-xl text-orange-500">
-              <AiFillShopping />
-            </span>
-            {card_product_count !== 0 && (
-              <div className="w-[20px] h-[20px] absolute bg-green-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px]">
-                {card_product_count}
-              </div>
-            )}
-          </div>
-          <div
-            onClick={() =>
-              navigate(userInfo ? "/dashboard/my-wishlist" : "/login")
-            }
-            className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]"
-          >
-            <span className="text-xl text-red-500">
-              <AiFillHeart />
-            </span>
-            {wishlist_count !== 0 && (
-              <div className="w-[20px] h-[20px] absolute bg-green-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px]">
-                {wishlist_count}
-              </div>
-            )}
-          </div>
+        <div className="footer-bottom-right">
+          <ul className="social-icons">
+            <li><a href="#" className="facebook"><i className="fab fa-facebook-f"></i></a></li>
+            <li><a href="#" className="twitter"><i className="fab fa-twitter"></i></a></li>
+            <li><a href="#" className="instagram"><i className="fab fa-instagram"></i></a></li>
+            <li><a href="#" className="linkedin"><i className="fab fa-linkedin-in"></i></a></li>
+          </ul>
         </div>
       </div>
     </footer>

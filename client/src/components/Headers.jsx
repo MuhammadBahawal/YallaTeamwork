@@ -45,24 +45,25 @@ const Headers = () => {
   };
 
   return (
-    <div className="w-full bg-[#FFD700]">
-      <div className="w-[85%] lg:w-[90%] mx-auto py-4">
+    <>
+    <div className="w-full bg-[#FFD700]  justify-between">
+      <div className="w-[85%] lg:w-[90%] mx-12 py-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link to="/">
             <img
               src="/images/logo.png"
               alt="logo"
-              className="w-[100px] rounded-[4px]"
+              className="w-[100px] rounded-[4px] "
             />
           </Link>
 
           {/* Full Navigation Links for small screens */}
           <ul
-            className={`lg:hidden flex justify-start items-center gap-8 text-sm font-bold uppercase text-[#333]`}
+            className={`lg:hidden flex justify-between  gap-6 text-sm font-bold uppercase text-[#333]`}
           >
             <li>
-              <Link to="/shops" className="nav-link flex items-center gap-1">
+              <Link to="/shops" className="nav-link flex items-center gap-1 ">
                 <FaStore />
                 Shop
               </Link>
@@ -107,12 +108,12 @@ const Headers = () => {
           </ul>
 
           {/* Search Bar and Customer Support Dropdown for small screens */}
-          <div className="lg:hidden flex items-center">
-            <div className="flex items-center rounded-full overflow-hidden">
+          <div className="lg:hidden flex items-center justify-between">
+            <div className="flex items-center  overflow-hidden justify-between">
               <input
                 type="text"
-                placeholder="What do you need?"
-                className="px-4 py-2 outline-none w-full text-sm text-black bg-#ffffff" // Set background to transparent
+                placeholder="What do you need from here?"
+                className="px-4 py-2 outline-none w-[600px] text-sm text-black bg-#ffffff" // Set background to transparent
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
               />
@@ -135,11 +136,11 @@ const Headers = () => {
 
             {/* Customer Support Dropdown */}
             <div
-              className="relative ml-2"
+              className="relative ml-2 left-2"
               onMouseEnter={() => setSupportShow(true)}
               onMouseLeave={() => setSupportShow(false)}
             >
-              <div className="cursor-pointer flex items-center gap-2">
+              <div className="cursor-pointer flex items-center gap-1">
                 <FaHeadset className="text-gray-700" />
                 <span className="text-sm font-bold">Policies</span>
                 <MdOutlineKeyboardArrowDown />
@@ -172,7 +173,7 @@ const Headers = () => {
                 <span>{userInfo.name}</span>
               </Link>
             ) : (
-              <Link to="/login" className="flex items-center gap-2">
+              <Link to="/login" className="flex items-center gap-2 ">
                 <FaLock />
                 <span>Login</span>
               </Link>
@@ -297,7 +298,7 @@ const Headers = () => {
               <div className="flex items-center border border-gray-300 rounded-full overflow-hidden">
                 <input
                   type="text"
-                  placeholder="What do you need?"
+                  placeholder="What do you need here?"
                   className="px-4 py-2 outline-none w-full text-sm text-black bg-transparent" // Set background to transparent
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
@@ -386,7 +387,7 @@ const Headers = () => {
                 </span>
               )}
             </li>
-
+            
             {/* Wish List On Small Screen */}
             <li
               onClick={() =>
@@ -399,7 +400,7 @@ const Headers = () => {
                 style={{
                   backgroundColor: "#e6c200",
                   color: "red",
-                  padding: "8px",
+                  padding: "9px",
                   borderRadius: "50%",
                   width: "35px",
                   height: "35px",
@@ -412,12 +413,76 @@ const Headers = () => {
                 >
                   {wishlist_count}
                 </div>
+                
               )}
+            
             </li>
+      
           </ul>
+          
         </div>
+        
       </div>
+      
     </div>
+    <div className="bg-black h-6 w-full overflow-hidden flex items-center shadow-md">
+  <marquee behavior="scroll" direction="left" className="text-white text-lg  tracking-wide">
+    <span className="mx-4">✨ Welcome to yalla7.com! ✨</span>
+    <span className="mx-4">📱 Download our app from the App Store and Play Store!</span>
+    <span className="mx-4">🌟 Enjoy exclusive offers and discounts!</span>
+    <span className="mx-4">🎉 Join us and experience the best service!</span>
+  </marquee>
+</div>
+
+
+
+
+
+
+    <div className="flex  items-center gap-6 bg-yellow-400 p-4 text-black text-center lg:text-left">
+  <div className="flex items-center space-x-2">
+    <h1 className="font-bold text-lg lg:text-xl">15% Cashback</h1>
+    <span className="text-lg lg:text-xl">+</span>
+    <h1 className="font-bold text-lg lg:text-xl">Free Delivery</h1>
+  </div>
+  <h2 className="text-sm lg:text-base">On your 1st order</h2>
+  
+  <img src="/images/logo.png" alt="Logo" className="w-24 lg:w-32 h-auto" />
+  
+  <h1 className="font-bold text-lg lg:text-xl">Refer your friend to get discount</h1>
+  
+  {/* Marquee with Text and Images */}
+  <div className="overflow-hidden h-20 w-[400px] relative ml-50">
+    <div className="absolute animate-marquee ml-50">
+      <p className="flex items-center space-x-2">
+        <img src="/images/small-image1.png" alt="Small 1" className="w-6 h-6" />
+        <span>Exclusive Offer!</span>
+        <img src="/images/small-image2.png" alt="Small 2" className="w-6 h-6" />
+        <span>Limited Time Only!</span>
+      </p>
+    </div>
+  </div>
+  
+</div>
+
+<style jsx>{`
+  @keyframes marquee {
+    0% {
+      transform: translateY(100%);
+    }
+    100% {
+      transform: translateY(-100%);
+    }
+  }
+
+  .animate-marquee {
+    animation: marquee 5s linear infinite;
+  }
+`}</style>
+
+
+    </>
+  
   );
 };
 
